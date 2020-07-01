@@ -11,12 +11,36 @@ var data = require('./data');
     }
     
     /**
+     * 
+     * @param {*} words 
+     * @param {*} text 
+     * إزالة الهمزات
+     * والتشكيل
+     */
+    function clean_text (text){
+    text = text.replace ("أ","ا")
+        .replace ("إ","ا")
+        .replace ("ٌ","")
+        .replace ("ُ","")
+        .replace ("ً","")
+        .replace ("َ","")
+        .replace ("ٍ","")
+        .replace ("ْ","")
+        .replace ("ّ","")
+        .replace ("ة","ه")
+        .replace ("ِ","");
+
+        return text;
+    }
+
+    /**
      * Determine if a single word is profane or looks profane.
      * @param {string} word - String to evaluate for profanity.
      */
     Filter.prototype.isProfaneLike = function (word) {
         var isProfane = false;
-        
+        word = clean_text(word);
+
         if (this.list.some(function(v) { return (word == v); })) {
             isProfane = true;
         } else {
@@ -68,6 +92,21 @@ var data = require('./data');
                 return true;}
         }.bind(this));
         return isProfane;
+    };
+    
+    /**
+     * Check a string for profanity and return an percent number .
+     * @param {string} string - Sentence to filter.
+     */
+    Filter.prototype.percent = function (string) {
+        var count = 0;
+        string.split(' ').map(function(word) {
+        if(this.isProfaneLike(word)) 
+            count++;
+        }.bind(this));
+        var stringLength = string.split(' ').length;
+
+        return count / stringLength *100;
     };
 
 module.exports = Filter;

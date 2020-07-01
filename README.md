@@ -1,4 +1,4 @@
-# bad-words-ar
+# bad-word-ar
 
 A more relaxed javascript filter for badwords. 
 
